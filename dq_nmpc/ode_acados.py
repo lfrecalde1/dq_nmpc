@@ -1,7 +1,6 @@
 import numpy as np
 import casadi as ca
 import numpy as np
-import matplotlib.pyplot as plt
 from dual_quaternion import Quaternion
 from dual_quaternion import DualQuaternion
 from casadi import Function
@@ -425,8 +424,8 @@ def ln_dual(q_error):
 
     trans_error = 2 * H_error_dual_plus@q_error_real_c
     # Computing log map
-    ln_quaternion = ca.vertcat((1/2)*angle*q_error_real[1, 0]/norm, (1/2)*angle*q_error_real[2, 0]/norm, (1/2)*angle*q_error_real[3, 0]/norm)
-    ln_trans = ca.vertcat((1/2)*trans_error[1, 0], (1/2)*trans_error[2, 0], (1/2)*trans_error[3, 0])
+    ln_quaternion = ca.vertcat(0.0, (1/2)*angle*q_error_real[1, 0]/norm, (1/2)*angle*q_error_real[2, 0]/norm, (1/2)*angle*q_error_real[3, 0]/norm)
+    ln_trans = ca.vertcat(0.0, (1/2)*trans_error[1, 0], (1/2)*trans_error[2, 0], (1/2)*trans_error[3, 0])
 
     q_e_ln = ca.vertcat(ln_quaternion, ln_trans)
 
@@ -524,6 +523,100 @@ def dual_aceleraction_casadi(dual, omega, u, L):
     T = ca.vertcat(T_r, T_d)
 
     return T
+
+def export_model(params):
+    # Constraints variable
+    constraint = ca.types.SimpleNamespace()
+
+    # Parameters Model
+    L = [params['mass'], params['ixx'], params['iyy'], params['izz'], params['gravity']]
+
+    # Model section parameters
+    model = AcadosModel()
+    model.name = params['mav_name']
+    model.z = []
+
+    # States of the system
+    qw_1d = ca.MX.sym('qw_1d', 1, 1)
+    qx_1d = ca.MX.sym('qx_1d', 1, 1)
+    qy_1d = ca.MX.sym('qy_1d', 1, 1)
+    qz_1d = ca.MX.sym('qz_1d', 1, 1)
+
+    dw_1d = ca.MX.sym("dw_1d", 1, 1)
+    dx_1d = ca.MX.sym("dx_1d", 1, 1)
+    dy_1d = ca.MX.sym("dy_1d", 1, 1)
+    dz_1d = ca.MX.sym("dz_1d", 1, 1)
+    
+    # Defining the desired Velocity using symbolics
+    vx_1d = ca.MX.sym("vx_1d", 1, 1)
+    vy_1d = ca.MX.sym("vy_1d", 1, 1)
+    vz_1d = ca.MX.sym("vz_1d", 1, 1)
+
+    wx_1d = ca.MX.sym("wx_1d", 1, 1)
+    wy_1d = ca.MX.sym("wy_1d", 1, 1)
+    wz_1d = ca.MX.sym("wz_1d", 1, 1)
+
+
+    X = ca.vertcat(qw_1d, qx_1d, qy_1d, qz_1d, dw_1d, dx_1d, dy_1d, dz_1d,
+                   wx_1d, wy_1d, wz_1d, vx_1d, vy_1d, vz_1d)
+    model.x = X
+
+    # Split States of the system
+    twist_1 = X[8:14, 0]
+    dualquat_1 = X[0:8, 0]
+
+    # Auxiliary variables implicit function
+    qw_1dot = ca.MX.sym('qw_1dot', 1, 1)
+    qx_1dot = ca.MX.sym('qx_1dot', 1, 1)
+    qy_1dot = ca.MX.sym('qy_1dot', 1, 1)
+    qz_1dot = ca.MX.sym('qz_1dot', 1, 1)
+
+    dw_1dot = ca.MX.sym("dw_1dot", 1, 1)
+    dx_1dot = ca.MX.sym("dx_1dot", 1, 1)
+    dy_1dot = ca.MX.sym("dy_1dot", 1, 1)
+    dz_1dot = ca.MX.sym("dz_1dot", 1, 1)
+
+    vx_1dot = ca.MX.sym("vx_1dot", 1, 1)
+    vy_1dot = ca.MX.sym("vy_1dot", 1, 1)
+    vz_1dot = ca.MX.sym("vz_1dot", 1, 1)
+
+    wx_1dot = ca.MX.sym("wx_1dot", 1, 1)
+    wy_1dot = ca.MX.sym("wy_1dot", 1, 1)
+    wz_1dot = ca.MX.sym("wz_1dot", 1, 1)
+
+    X_dot = ca.vertcat(qw_1dot, qx_1dot, qy_1dot, qz_1dot, dw_1dot, dx_1dot, dy_1dot, dz_1dot,
+                       wx_1dot, wy_1dot, wz_1dot, vx_1dot, vy_1dot, vz_1dot)
+
+    # Control Actions
+    F_ref = ca.MX.sym('F_ref')
+    tau_1_ref = ca.MX.sym('tau_1_ref')
+    tau_2_ref = ca.MX.sym('tau_2_ref')
+    tau_3_ref = ca.MX.sym('tau_3_ref')
+
+    u = ca.vertcat(F_ref, tau_1_ref, tau_2_ref, tau_3_ref)
+    model.u = u
+    
+    # System Dynamics
+    dualdot = quatdot_simple(dualquat_1, twist_1)
+    twistdot = dual_aceleraction_casadi(dualquat_1, twist_1, u, L)
+    f_expl = ca.vertcat(dualdot, twistdot)
+    f_impl = X_dot - f_expl
+
+    # External parameters
+    ref_params = ca.MX.sym('ref_params', params['nmpc']['nx'] + params['nmpc']['nu'], 1)
+    cost_params = ca.MX.sym('cost_params', params['nmpc']['nx'] + params['nmpc']['nx'] + params['nmpc']['nu'], 1)
+    model.p = ca.vertcat(ref_params, cost_params)
+
+    model.f_impl_expr = f_impl
+    model.f_expl_expr = f_expl
+    model.xdot = X_dot
+    
+    # Constraint system
+    norm_q = ca.norm_2(get_quat(X[0:8]))
+    constraint.expr = ca.vertcat(norm_q)
+    constraint.min = 1.0
+    constraint.max = 1.0
+    return model, get_trans, get_quat, constraint, error_lie, error_dual, ln_dual, Ad, conjugate_dual, rotation
 
 def quadrotorModel(L: list)-> AcadosModel:
     # Dynamics of the quadrotor based on unit quaternions
@@ -810,7 +903,7 @@ def trajectory(t, zi, w_c):
 
     x0 = 0 * np.zeros((t.shape[0]))
     y0 = 0 * np.zeros((t.shape[0]))
-    z0 = 3 * np.ones((t.shape[0]))
+    z0 = 6 * np.ones((t.shape[0]))
 
     h0 = np.vstack((x0, y0, z0))
     r = r + h0
@@ -950,7 +1043,7 @@ def compute_flatness_states(L, x, t_initial, t_trajectory, t_final, sample_time,
         # Compute torque
         M[:, k] = aux_torque
         # Compute nominal force of the in the body frame
-    return hd, hd_p, hd_pp, q, w, f, M, t
+    return hd, hd_p, hd_pp, hd_ppp, hd_pppp, q, w, w_p, f, M, t
 
 def position_time(t):
     t = np.array(t)  # Ensure t is a NumPy array

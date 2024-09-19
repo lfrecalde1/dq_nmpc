@@ -52,24 +52,24 @@ class DQnmpcNode(Node):
     def __init__(self):
         super().__init__('DQNMPC_FINAL')
         # Lets define internal variables
-        self.g = 9.81
-        self.mQ = (1.27)
+        self.g = 9.80665
+        self.mQ = (1.272)
 
         # Inertia Matrix
-        self.Jxx = 0.0030
-        self.Jyy = 0.0045
-        self.Jzz = 0.00159687
+        self.Jxx = 0.00304475
+        self.Jyy = 0.00454981
+        self.Jzz = 0.00281995
         self.J = np.array([[self.Jxx, 0.0, 0.0], [0.0, self.Jyy, 0.0], [0.0, 0.0, self.Jzz]])
         self.L = [self.mQ, self.Jxx, self.Jyy, self.Jzz, self.g]
 
         # Desired sample time  self.ts, time where we want to init over trajectory t_initial, time for the trajectory t_trajectory
         # Time to go to the init state t_final
         # Initial time to established a stable connection self.initial
-        self.ts = 0.01
+        self.ts = 0.05
         t_inital = 2
         t_trajectory = 30
         t_final = 2
-        self.initial = 5
+        self.initial = 1
 
         # Initial States dual set zeros
         # Position of the system
@@ -108,6 +108,7 @@ class DQnmpcNode(Node):
         # Definition of the horizon
         self.N = np.arange(0, self.t_N + self.ts, self.ts)
         self.N_prediction = self.N.shape[0]
+        print(self.N_prediction)
 
         # Auxiliar time in order to establoshed a stable conection
         self.t_aux = np.arange(0, t_inital + self.ts, self.ts, dtype=np.double)
@@ -290,11 +291,14 @@ class DQnmpcNode(Node):
 
         # No Cython
         json_name = "acados_ocp_" + ocp.model.name + ".json"
-        json_name = str(get_package_share_path("dual_nmpc") / json_name)
-        #acados_ocp_solver = AcadosOcpSolver(ocp, json_file=json_name, build= True, generate= True)
-        acados_ocp_solver = AcadosOcpSolver(ocp, json_file=json_name, build= False, generate= False)
-        #acados_integrator = AcadosSimSolver(ocp, json_file="acados_sim_" + json_name, build= True, generate= True)
-        acados_integrator = AcadosSimSolver(ocp, json_file="acados_sim_" + json_name, build= False, generate= False)
+        json_name = str(get_package_share_path("dq_nmpc") / json_name)
+
+        json_name_sim = "acados_sim_" + ocp.model.name + ".json"
+        json_name_sim = str(get_package_share_path("dq_nmpc") / json_name)
+        acados_ocp_solver = AcadosOcpSolver(ocp, json_file=json_name, build= True, generate= True)
+        #acados_ocp_solver = AcadosOcpSolver(ocp, json_file=json_name, build= False, generate= False)
+        acados_integrator = AcadosSimSolver(ocp, json_file=json_name_sim, build= True, generate= True)
+        #acados_integrator = AcadosSimSolver(ocp, json_file=json_name_sim, build= False, generate= False)
 
         # Reset Solver
         acados_ocp_solver.reset()

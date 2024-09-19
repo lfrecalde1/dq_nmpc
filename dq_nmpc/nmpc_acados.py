@@ -1,5 +1,5 @@
 from acados_template import AcadosOcp, AcadosOcpSolver, AcadosSimSolver
-from dq_nmpc import quadrotorModel
+from ode_acados import quadrotorModel
 from casadi import Function, MX, vertcat, sin, cos, fabs, DM
 import casadi as ca
 
@@ -66,21 +66,21 @@ def create_ocp_solver(x0, N_horizon, t_horizon, F_max, F_min, tau_1_max, tau_1_m
     # Gain Matrix complete error
 
     Q_l = MX.zeros(6, 6)
-    Q_l[0, 0] = 4
-    Q_l[1, 1] = 4
-    Q_l[2, 2] = 4
-    Q_l[3, 3] = 2.6
-    Q_l[4, 4] = 2.6
-    Q_l[5, 5] = 2.6
+    Q_l[0, 0] = 0.5
+    Q_l[1, 1] = 0.5
+    Q_l[2, 2] = 0.5
+    Q_l[3, 3] = 2
+    Q_l[4, 4] = 2
+    Q_l[5, 5] = 2
 
     #ocp.model.cost_expr_ext_cost = 10*(ln_error.T@Q_l@ln_error) + 1*(error_nominal_input.T @ R @ error_nominal_input) + 1*(error_dot.T@error_dot) + 1*(ln_error.T@error_dot)
     #ocp.model.cost_expr_ext_cost_e =  10*(ln_error.T@Q_l@ln_error) + 1*(error_dot.T@error_dot) + 1*(ln_error.T@error_dot)
 
-    #ocp.model.cost_expr_ext_cost = 10*(ln_error.T@Q_l@ln_error) + 1*(error_nominal_input.T @ R @ error_nominal_input)+ 0.2*(error_w.T@error_w) + 0.2*(error_v.T@error_v)
-    #ocp.model.cost_expr_ext_cost_e =  10*(ln_error.T@Q_l@ln_error)+ 0.2*(error_w.T@error_w) + 0.2*(error_v.T@error_v)
+    ocp.model.cost_expr_ext_cost = 10*(ln_error.T@Q_l@ln_error) + 1*(error_nominal_input.T @ R @ error_nominal_input)+ 1*(error_w.T@error_w) + 1*(error_v.T@error_v)
+    ocp.model.cost_expr_ext_cost_e =  10*(ln_error.T@Q_l@ln_error)+ 1*(error_w.T@error_w) + 1*(error_v.T@error_v)
 
-    ocp.model.cost_expr_ext_cost = 10*(ln_error.T@Q_l@ln_error) + 1*(error_nominal_input.T @ R @ error_nominal_input)
-    ocp.model.cost_expr_ext_cost_e =  10*(ln_error.T@Q_l@ln_error)
+    #ocp.model.cost_expr_ext_cost = 10*(ln_error.T@Q_l@ln_error) + 1*(error_nominal_input.T @ R @ error_nominal_input)
+    #ocp.model.cost_expr_ext_cost_e =  10*(ln_error.T@Q_l@ln_error)
 
     # Auxiliary variable initialization
     #ocp.parameter_values = np.zeros(nx + nu)
