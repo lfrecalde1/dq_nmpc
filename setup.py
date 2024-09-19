@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "dq_nmpc = dq_nmpc.main:main"
+            "dq_nmpc = dq_nmpc.main_dq_nmpc:main"
         ],
     },
 )
