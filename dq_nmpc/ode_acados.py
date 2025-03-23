@@ -530,6 +530,7 @@ def export_model(params):
 
     # Parameters Model
     L = [params['mass'], params['ixx'], params['iyy'], params['izz'], params['gravity']]
+    print(L)
 
     # Model section parameters
     model = AcadosModel()

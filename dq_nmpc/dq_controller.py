@@ -165,15 +165,43 @@ def solver(params):
     #ocp.constraints.idxsh = np.array(range(nsh))
 #
     # Set options
-    ocp.solver_options.qp_solver = "FULL_CONDENSING_HPIPM" 
-    #ocp.solver_options.qp_solver_cond_N = params['nmpc']['horizon_steps']//4
-    ocp.solver_options.hessian_approx = "GAUSS_NEWTON"  
-    ocp.solver_options.regularize_method = "CONVEXIFY"  
-    ocp.solver_options.integrator_type = "IRK"
-    ocp.solver_options.nlp_solver_type = "SQP_RTI"
-    ocp.solver_options.tf = params['nmpc']['horizon_time']
+    ocp.solver_options.qp_solver = 'FULL_CONDENSING_HPIPM'  # Efficient QP solver
+    ocp.solver_options.nlp_solver_type = 'SQP_RTI'  # Fast real-time SQP
+    ocp.solver_options.hessian_approx = 'GAUSS_NEWTON'  # Gauss-Newton approximation
+    ocp.solver_options.integrator_type = 'IRK'  # Implicit Runge-Kutta (IRK)
+
+    ## Regularization (stabilizes optimization)
+    ocp.solver_options.regularize_method = 'NO_REGULARIZE'  
+
+    ## Levenberg-Marquardt regularization (optional)
     ocp.solver_options.levenberg_marquardt = 10.0
-    ocp.solver_options.tol = 1e-3
+
+    ## NLP Solver Settings
+    ocp.solver_options.nlp_solver_max_iter = 200  # Maximum iterations
+    ocp.solver_options.nlp_solver_tol_stat = 1e-2  # Tolerance for stationarity
+    ocp.solver_options.print_level = 0  # Suppress print output
+
+    ocp.solver_options.tf = params['nmpc']['horizon_time']
+
+    ## QP Solver Options
+    ##ocp.solver_options.qp_solver_warm_start = 1  # Enable QP hot-start
+    ocp.solver_options.qp_solver_cond_N = params['nmpc']['horizon_steps']  # Number of QP stages for partial condensing
+    ocp.solver_options.qp_solver_ric_alg = 1  # Use Riccati-based algorithm
+
+    ## Compilation flags for external functions (optional for performance)
+    ocp.solver_options.ext_fun_compile_flags = '-Ofast -march=native'
+    ocp.solver_options.hpipm_mode = 'SPEED'  # Prioritize speed in QP solver
+
+    # Parallelization
+    ocp.solver_options.cg_use_openmp = True  # Enable OpenMP parallelization
+    ocp.solver_options.cg_hardcode_constraints = False  # Allow runtime constraint changes
+    ocp.solver_options.cg_use_variable_weighting_matrix = True  # Support time-varying costs
+
+    ocp.solver_options.sim_method_num_stages = 4  # IRK-GL4: 4 stages for accuracy
+    ocp.solver_options.sim_method_num_steps = 1  # Number of integration steps
+    ocp.solver_options.sim_method_newton_iter = 2  # Newton iterations for convergence
+
+    print("New Set Up")
 
 
     #acados_solver = AcadosOcpSolver(ocp, json_file='acados_ocp_mpc.json', build = True, generate = True)

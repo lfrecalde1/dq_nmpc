@@ -10,14 +10,16 @@ platform_type=${platform_type:-race}
 echo 'thank you!'
 echo ""
 
-python3 dq_nmpc/dq_controller.py ../arpl_autonomy_stack/config/$platform_type/default/dq_control.yaml
+python3 dq_nmpc/dq_controller.py $COLCON_WS_DIR/src/arpl_autonomy_stack/config/$platform_type/default/dq_control.yaml
+
+cp c_generated_code/libacados_ocp_solver_quadrotor.so $COLCON_WS_DIR/install/dq_cpp/lib
+
+echo "Deleting old Files"
+rm -rf $COLCON_WS_DIR/src/dq_cpp/c_generated_code
+mv -f c_generated_code $COLCON_WS_DIR/src/dq_cpp/
+
+
+cd $COLCON_WS_DIR
 source ~/.bashrc
-cd ../..
-colcon build --packages-select arpl_nmpc
+colcon build --symlink-install --packages-select dq_cpp
 source install/setup.bash
-cd src/arpl_nmpc
-
-echo ""
-echo "copying acados lib in workspace"
-cp c_generated_code/libacados_ocp_solver_quadrotor.so ../../install/arpl_nmpc/lib
-
