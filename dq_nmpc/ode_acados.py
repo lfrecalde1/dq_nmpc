@@ -485,9 +485,9 @@ def error_dual_aux_casadi():
     f_error_dual = Function('f_error_dual', [qd, q], [q_error])
     return f_error_dual
 
-def dual_aceleraction_casadi(dual, omega, u, L):
+def dual_aceleraction_casadi(dual, omega, f_real, u, L):
     # Split Control Actions
-    force = u[0, 0]
+    force = f_real
     torques = u[1:4, 0]
 
     # System Matrices
@@ -528,7 +528,7 @@ def export_model(params):
     constraint = ca.types.SimpleNamespace()
 
     # Parameters Model
-    L = [params['mass'], params['ixx'], params['iyy'], params['izz'], params['gravity']]
+    L = [params['mass'], params['ixx'], params['iyy'], params['izz'], params['gravity'], params["force_delay"]]
     print(L)
 
     # Model section parameters
@@ -556,9 +556,12 @@ def export_model(params):
     wy_1d = ca.MX.sym("wy_1d", 1, 1)
     wz_1d = ca.MX.sym("wz_1d", 1, 1)
 
+    # Defining the desired Velocity using symbolics
+    f1d = ca.MX.sym('fd', 1, 1)
+
 
     X = ca.vertcat(qw_1d, qx_1d, qy_1d, qz_1d, dw_1d, dx_1d, dy_1d, dz_1d,
-                   wx_1d, wy_1d, wz_1d, vx_1d, vy_1d, vz_1d)
+                   wx_1d, wy_1d, wz_1d, vx_1d, vy_1d, vz_1d, f1d)
     model.x = X
 
     # Split States of the system
@@ -584,8 +587,10 @@ def export_model(params):
     wy_1dot = ca.MX.sym("wy_1dot", 1, 1)
     wz_1dot = ca.MX.sym("wz_1dot", 1, 1)
 
+    f_1dot = ca.MX.sym('f1dot', 1, 1)
+
     X_dot = ca.vertcat(qw_1dot, qx_1dot, qy_1dot, qz_1dot, dw_1dot, dx_1dot, dy_1dot, dz_1dot,
-                       wx_1dot, wy_1dot, wz_1dot, vx_1dot, vy_1dot, vz_1dot)
+                       wx_1dot, wy_1dot, wz_1dot, vx_1dot, vy_1dot, vz_1dot, f_1dot)
 
     # Control Actions
     F_ref = ca.MX.sym('F_ref')
@@ -598,8 +603,10 @@ def export_model(params):
     
     # System Dynamics
     dualdot = quatdot_simple(dualquat_1, twist_1)
-    twistdot = dual_aceleraction_casadi(dualquat_1, twist_1, u, L)
-    f_expl = ca.vertcat(dualdot, twistdot)
+    f_dot = (F_ref - f1d)/(L[5])
+    twistdot = dual_aceleraction_casadi(dualquat_1, twist_1, f1d, u, L)
+
+    f_expl = ca.vertcat(dualdot, twistdot, f_dot)
     f_impl = X_dot - f_expl
 
     # External parameters

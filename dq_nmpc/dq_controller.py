@@ -38,19 +38,22 @@ def solver(params):
     dual = x[0:8]
     w_b = x[8:11]
     v_b = x[11:14]
+    f_b = x[14]
     #v_i = rotation(x[0:4], v_b)
 
     # Desired states of the system
     ref_dual = p[0:8]
     ref_w_b = p[8:11]
     ref_v_i = p[11:14]
-    ref_control = p[14:18]
+    ref_f_b = p[14]
+    ref_control = p[15:19]
 
     # Control actions limits
     f_max = params['nmpc']['ubu'][0]
     tau_1_max = params['nmpc']['ubu'][1]
     tau_2_max = params['nmpc']['ubu'][2]
     tau_3_max = params['nmpc']['ubu'][3]
+
     R = p[-(nu):]
     R[0] = R[0]/f_max
     R[1] = R[1]/tau_1_max
@@ -112,7 +115,8 @@ def solver(params):
     ln_error = ln(error_dual)
     error_w = w_b - ref_w_b
     error_v = v_b - ref_v_i
-    error_u = ref_control - u 
+    u_new = vertcat(f_b, u[1], u[2], u[3])
+    error_u = ref_control - u_new
 
     # Lyapunov Function
     #primary_error = error_dual[1:4]
@@ -129,6 +133,7 @@ def solver(params):
                                      0.0, 0.0, 0.0, 0.0,    # Dual part dualquaternion
                                      0.0, 0.0, 0.0,         # Angular velocity body frame
                                      0.0, 0.0, 0.0,         # Linear velocity body frame
+                                     0.0,                   # Force
                                      0.0, 0.0, 0.0, 0.0
                                      ])  
     # Init Values for the cost
