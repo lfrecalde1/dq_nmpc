@@ -1,0 +1,22 @@
+running develop
+running egg_info
+creating dq_nmpc.egg-info
+writing dq_nmpc.egg-info/PKG-INFO
+writing dependency_links to dq_nmpc.egg-info/dependency_links.txt
+writing entry points to dq_nmpc.egg-info/entry_points.txt
+writing requirements to dq_nmpc.egg-info/requires.txt
+writing top-level names to dq_nmpc.egg-info/top_level.txt
+writing manifest file 'dq_nmpc.egg-info/SOURCES.txt'
+reading manifest file 'dq_nmpc.egg-info/SOURCES.txt'
+writing manifest file 'dq_nmpc.egg-info/SOURCES.txt'
+running build_ext
+Creating /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/lib/python3.10/site-packages/dq-nmpc.egg-link (link to .)
+Installing dq_nmpc script to /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/lib/dq_nmpc
+
+Installed /ext3/ws_acp/src/dq_nmpc/build/dq_nmpc
+running symlink_data
+creating /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/share/ament_index
+creating /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/share/ament_index/resource_index
+creating /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/share/ament_index/resource_index/packages
+symbolically linking /ext3/ws_acp/src/dq_nmpc/build/dq_nmpc/resource/dq_nmpc -> /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/share/ament_index/resource_index/packages
+symbolically linking /ext3/ws_acp/src/dq_nmpc/build/dq_nmpc/package.xml -> /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/share/dq_nmpc

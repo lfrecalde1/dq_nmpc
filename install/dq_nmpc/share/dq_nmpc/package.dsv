@@ -1,0 +1,9 @@
+source;share/dq_nmpc/hook/pythonpath.ps1
+source;share/dq_nmpc/hook/pythonpath.dsv
+source;share/dq_nmpc/hook/pythonpath.sh
+source;share/dq_nmpc/hook/ament_prefix_path.ps1
+source;share/dq_nmpc/hook/ament_prefix_path.dsv
+source;share/dq_nmpc/hook/ament_prefix_path.sh
+source;../../build/dq_nmpc/share/dq_nmpc/hook/pythonpath_develop.ps1
+source;../../build/dq_nmpc/share/dq_nmpc/hook/pythonpath_develop.dsv
+source;../../build/dq_nmpc/share/dq_nmpc/hook/pythonpath_develop.sh

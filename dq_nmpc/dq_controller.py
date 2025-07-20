@@ -197,9 +197,9 @@ def solver(params):
     ocp.solver_options.cg_hardcode_constraints = False  # Allow runtime constraint changes
     ocp.solver_options.cg_use_variable_weighting_matrix = True  # Support time-varying costs
 
-    ocp.solver_options.sim_method_num_stages = 4  # IRK-GL4: 4 stages for accuracy
+    ocp.solver_options.sim_method_num_stages = 2  # IRK-GL4: 4 stages for accuracy
     ocp.solver_options.sim_method_num_steps = 1  # Number of integration steps
-    ocp.solver_options.sim_method_newton_iter = 2  # Newton iterations for convergence
+    ocp.solver_options.sim_method_newton_iter = 1  # Newton iterations for convergence
 
     print("New Set Up")
 

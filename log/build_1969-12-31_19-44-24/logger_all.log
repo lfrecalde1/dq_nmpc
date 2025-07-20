@@ -1,0 +1,32 @@
+[0.273s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--symlink-install']
+[0.274s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=True, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0xffffad9808e0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0xffffadb29b10>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0xffffadb29b10>>)
+[0.797s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.797s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.797s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.797s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.797s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.798s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.798s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/ext3/ws_acp/src/dq_nmpc'
+[0.798s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.798s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.798s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.798s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.799s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.799s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.799s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.799s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.799s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.883s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_python' and name 'dq_nmpc'
+[0.883s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.883s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.883s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.883s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.883s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.931s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.931s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.935s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/ext3/ws_acp/install/arpl_nmpc' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.940s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/ext3/ws_acp/install/arpl_nmpc' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.942s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /ext3/ws_acp/src/dq_nmpc/install
+[0.948s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 65 installed packages in /ext3/ws_acp/install
+[0.952s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 311 installed packages in /opt/ros/humble
+[0.957s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults

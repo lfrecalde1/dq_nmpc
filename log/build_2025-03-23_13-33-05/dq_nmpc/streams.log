@@ -1,0 +1,31 @@
+[1.955s] Invoking command in '/ext3/ws_acp/src/dq_nmpc/build/dq_nmpc': PYTHONPATH=/ext3/ws_acp/src/dq_nmpc/build/dq_nmpc/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /ext3/ws_acp/src/dq_nmpc/build/dq_nmpc/build --no-deps symlink_data
+[2.653s] /usr/local/lib/python3.10/dist-packages/setuptools_scm/_integration/setuptools.py:31: RuntimeWarning: 
+[2.653s] ERROR: setuptools==59.6.0 is used in combination with setuptools_scm>=8.x
+[2.653s] 
+[2.653s] Your build configuration is incomplete and previously worked by accident!
+[2.654s] setuptools_scm requires setuptools>=61
+[2.654s] 
+[2.654s] Suggested workaround if applicable:
+[2.654s]  - migrating from the deprecated setup_requires mechanism to pep517/518
+[2.654s]    and using a pyproject.toml to declare build dependencies
+[2.654s]    which are reliably pre-installed before running the build tools
+[2.654s] 
+[2.654s]   warnings.warn(
+[2.740s] running develop
+[2.741s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[2.741s]   warnings.warn(
+[3.307s] running egg_info
+[3.307s] writing dq_nmpc.egg-info/PKG-INFO
+[3.307s] writing dependency_links to dq_nmpc.egg-info/dependency_links.txt
+[3.308s] writing entry points to dq_nmpc.egg-info/entry_points.txt
+[3.308s] writing requirements to dq_nmpc.egg-info/requires.txt
+[3.308s] writing top-level names to dq_nmpc.egg-info/top_level.txt
+[3.446s] reading manifest file 'dq_nmpc.egg-info/SOURCES.txt'
+[3.448s] writing manifest file 'dq_nmpc.egg-info/SOURCES.txt'
+[3.543s] running build_ext
+[3.543s] Creating /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/lib/python3.10/site-packages/dq-nmpc.egg-link (link to .)
+[3.545s] Installing dq_nmpc script to /ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/lib/dq_nmpc
+[3.546s] 
+[3.546s] Installed /ext3/ws_acp/src/dq_nmpc/build/dq_nmpc
+[3.546s] running symlink_data
+[3.637s] Invoked command in '/ext3/ws_acp/src/dq_nmpc/build/dq_nmpc' returned '0': PYTHONPATH=/ext3/ws_acp/src/dq_nmpc/build/dq_nmpc/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/ext3/ws_acp/src/dq_nmpc/install/dq_nmpc/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /ext3/ws_acp/src/dq_nmpc/build/dq_nmpc/build --no-deps symlink_data
