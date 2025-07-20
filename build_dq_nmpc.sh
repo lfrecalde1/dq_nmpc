@@ -10,7 +10,7 @@ platform_type=${platform_type:-race}
 echo 'thank you!'
 echo ""
 
-python3 dq_nmpc/dq_controller.py /home/ros2_ws/src/arpl_autonomy_stack/config/eagle/default/dq_control_simulator.yaml
+python3 dq_nmpc/dq_controller.py /home/ros2_ws/src/arpl_autonomy_stack/config/eagle/default/dq_control_simulator_force.yaml
 
 cp c_generated_code/libacados_ocp_solver_quadrotor.so /home/ros2_ws/install/dq_cpp/lib
 
